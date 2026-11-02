@@ -63,7 +63,7 @@ a {
   margin: 0;
 }
 
-.hero-media img,
+.hero-media video,
 .hero-media .placeholder {
   display: flex;
   align-items: center;
