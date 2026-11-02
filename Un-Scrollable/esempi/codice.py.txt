@@ -1,0 +1,145 @@
+from pyppeteer import launch
+import random
+import asyncio
+import time
+from threading import Thread, Lock
+import serial
+import os
+
+if os.name == "nt":
+    serial_port = "COM5"
+else:
+    serial_port = "/dev/ttyUSB0"
+
+should_scroll = False
+glob_lock = Lock()
+
+
+def read_sensors():
+    global should_scroll, glob_lock
+    print("Sensorthread started")
+    ser = serial.Serial(serial_port, 9600, timeout=0.1)
+    distances = []
+    while True:
+        try:
+            data = ser.readline().decode().strip()
+            distance = float(data)
+            distances.append(distance)
+            if len(distances) > 5:
+                distances.pop(0)
+            distance = min(distances)
+        except Exception as e:
+            continue
+
+        if distance < 70:
+            with glob_lock:
+                should_scroll = True
+        else:
+            with glob_lock:
+                should_scroll = False
+        time.sleep(0.1)
+
+
+async def create_element(page, text='scroll_time = "00:20:42";'):
+    await page.evaluate(
+        f"""() => {{
+        // Create overlay container
+        const overlay = document.createElement('div');
+        overlay.id = 'centered-container';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.display = 'none';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+        overlay.style.zIndex = '9999';
+        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+
+        // Create inner content box
+        const box = document.createElement('div');
+        box.id = 'centered-box';
+        box.innerText = '{text}';
+        box.style.padding = '20px';
+        box.style.backgroundColor = 'white';
+        box.style.border = '2px solid black';
+        box.style.borderRadius = '8px';
+        box.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
+        box.style.fontSize = '5em';
+        box.style.color = 'black';
+        box.style.fontFamily = 'Courier New';
+
+        overlay.style.display = 'flex';
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+
+        document.getElementById('centered-container').style.display = 'none';
+
+    }}"""
+    )
+
+
+async def show_element(page, delay=None):
+    if delay:
+        await asyncio.sleep(delay)
+    await page.evaluate(
+        """() => {
+        document.getElementById('centered-container').style.display = 'flex';
+    }"""
+    )
+
+
+async def hide_element(page):
+    await page.evaluate(
+        """() => {
+        document.getElementById('centered-container').style.display = 'none';
+    }"""
+    )
+
+
+async def command_browser():
+    global should_scroll, glob_lock
+
+    first_scroll = False
+    print("Browser thread started")
+    browser = await launch(
+        headless=False, args=["--no-sandbox", "--disable-gpu", "--start-maximized"], handleSIGINT=False, handleSIGTERM=False, handleSIGHUP=False
+    )
+    page = await browser.newPage()
+    await page.goto("https://www.reddit.com/")
+    el = await page.Jx("/html/body/div/div/div[2]/div/div[2]/div/div/a")
+    await el[0].click()
+    time.sleep(2)
+    await page.goBack()
+    time.sleep(2)
+
+    await create_element(page)
+
+    while True:
+        with glob_lock:
+            local_scroll = should_scroll
+        if local_scroll:
+            first_scroll = True
+            await hide_element(page)
+            await page.evaluate(
+                """{
+        window.scrollBy({
+            top: 2,
+            left: 0,
+            behavior: "smooth",
+        });
+    }"""
+            )
+            await asyncio.sleep(0.02)
+        else:
+            if first_scroll:
+                await show_element(page, delay=2)
+            await asyncio.sleep(0.5)
+
+
+thread1 = Thread(target=asyncio.run, args=(command_browser(),))
+thread2 = Thread(target=read_sensors)
+
+thread1.start()
+thread2.start()

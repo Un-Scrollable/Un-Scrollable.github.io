@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Un-Scrollable</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header class="navbar">
+      <a href="#top" class="logo">Un-Scrollable</a>
+      <nav>
+        <a href="#about">About</a>
+        <a href="#galleria">Galleria</a>
+        <a href="#procedimento">Procedimento</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-text">
+          <p class="meta">Progetto Artistico / 2025</p>
+          <h1>Un-Scrollable</h1>
+          <p class="descrizione">
+            Il progetto consiste in un'installazione multimediale composta da
+            uno schermo e un sensore di prossimità. L'installazione vuole
+            riflettere sulla logica dello scrolling, la frammentazione e la
+            ripetizione del contenuto, ma, soprattutto, sul fenomeno di
+            dissociazione digitale. Non è il contenuto ad avere senso, ma l'atto
+            di scrollare stesso, che diventa quasi ipnotico.
+          </p>
+        </div>
+
+        <figure class="hero-media">
+          <div>
+            <img src="img/animazione.gif" alt="Animazione del progetto" />
+          </div>
+        </figure>
+      </section>
+
+      <section id="about" class="section">
+        <div class="label">01 — About</div>
+        <div class="content">
+          <h2>La teoria alla base</h2>
+
+          <p>
+            Il progetto prende spunto dal concetto di "meme" e dalla sua
+            etimologia. Il termine deriva dal greco mímēma, ovvero "imitazione"
+            o "cosa imitata". Questa radice ci rimanda a un concetto legato al
+            mondo dell'arte: la mimesi. La mimesi, in origine, era intesa come
+            imitazione della realtà. Platone aveva una visione passiva della
+            mimesi, la definiva come una copia imperfetta del mondo sensibile
+            (lo stesso mondo che era a sua volta copia dell'Idea) e dunque
+            lontana dalla verità. Ma già con Aristotele si era costruita una
+            visione più attiva della mimesi: non solo copia, ma modo per
+            rappresentare, rielaborare e generare una nuova realtà. C. Wulf
+            estende ulteriormente questa visione, invitandoci a considerare la
+            mimesi non solo come forma estetica o artistica, ma come struttura
+            del pensiero e dell'agire umano. La mimesi è un modo per
+            comprendere, incorporare, reinterpretare il mondo. Il meme, in
+            questa ottica, può essere inteso come un gesto mimetico. Non
+            un'opera d'arte in sé, ma parte di un linguaggio. Un modo per
+            rappresentare un'espressione, una situazione, un'esperienza
+            condivisa. Un segno che imita, rielabora, stratifica. E soprattutto,
+            un elemento che funziona solo se inserito nel giusto insieme.
+          </p>
+
+          <p>
+            L'opera non è un meme, ma vuole imitare il contenitore di fruizione
+            di questo linguaggio. Vuole riprendere la logica dello scroll, la
+            frammentazione e la ripetizione del contenuto e soprattutto la
+            dipendenza dall'interazione. Quest'ultima però viene resa autonoma e
+            meccanica. Non è il contenuto ad avere senso, ma l'atto di scrollare
+            stesso. Il pubblico, semplicemente con la sua presenza, attiva il
+            dispositivo mimetico. L'opera mima l'esperienza quotidiana del feed:
+            guarda, consuma, passa oltre. Ma al termine dell'interazione, resta
+            solo il tempo, che scorre inesorabile.
+          </p>
+        </div>
+      </section>
+
+      <section id="galleria" class="section">
+        <div class="label">02 — Galleria</div>
+
+        <div class="content wide">
+          <div class="gallery-head">
+            <h2>Immagini del progetto</h2>
+
+            <div class="arrows">
+              <button type="button" id="prev" aria-label="Indietro">←</button>
+              <button type="button" id="next" aria-label="Avanti">→</button>
+            </div>
+          </div>
+
+          <div class="gallery" id="gallery">
+            <figure class="slide">
+              <img
+                src="img/struttura1.webp"
+                alt="Struttura dell'installazione"
+                style="object-position: 50% 10%"
+              />
+              <figcaption>Fig. 1 — Struttura dell'installazione</figcaption>
+            </figure>
+
+            <figure class="slide">
+              <img
+                src="img/struttura2.webp"
+                alt="Struttura dell'installazione"
+                style="object-position: 50% 48%"
+              />
+              <figcaption>Fig. 2 — Struttura dell'installazione</figcaption>
+            </figure>
+
+            <figure class="slide">
+              <img
+                src="img/struttura3.webp"
+                alt="Struttura dell'installazione"
+                style="object-position: 50% 48%"
+              />
+              <figcaption>Fig. 3 — Struttura dell'installazione</figcaption>
+            </figure>
+
+            <figure class="slide">
+              <img
+                src="img/Display.webp"
+                alt="display dell'installazione"
+                style="object-position: 50% 40%"
+              />
+              <figcaption>Fig. 4 — Display dell'installazione</figcaption>
+            </figure>
+
+            <figure class="slide">
+              <img
+                src="img/arduino.webp"
+                alt="Arduino"
+                style="object-position: 50% 40%"
+              />
+              <figcaption>Fig. 5 — Arduino</figcaption>
+            </figure>
+
+            <figure class="slide">
+              <img
+                src="img/sonar.webp"
+                alt="Sonar"
+                style="object-position: 50% 40%"
+              />
+              <figcaption>Fig. 6 — Sonar</figcaption>
+            </figure>
+
+            <figure class="slide">
+              <img
+                src="img/sonar2.webp"
+                alt="Sonar"
+                style="object-position: 50% 40%"
+              />
+              <figcaption>Fig. 6 — Sonar coperto</figcaption>
+            </figure>
+
+            <figure class="slide">
+              <img
+                src="img/progetto.webp"
+                alt="Progetto"
+                style="object-position: 50% 40%"
+              />
+              <figcaption>Fig. 7 — Progetto</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="procedimento" class="section">
+        <div class="label">03 — Procedimento</div>
+
+        <div class="content">
+          <h2>Descrizione dell’infrastruttura hardware/software</h2>
+
+          <ol class="steps">
+            <li>
+              <span class="num">01</span>
+              <div>
+                <h3>Hardware e software</h3>
+                <p>
+                  Per la realizzazione del progetto è stata utilizzata una
+                  combinazione di tecnologie hardware (un Arduino Uno[CC],
+                  collegato ad un sonar per rilevare la presenza di uno
+                  spettatore davanti all'installazione) e software, ovvero un
+                  programma che consente di pilotare un browser, in questo caso
+                  è stato utilizzato Chromium in base all'output dell'Arduino.
+                </p>
+              </div>
+            </li>
+
+            <li>
+              <span class="num">02</span>
+              <div>
+                <h3>Arduino</h3>
+                <p>
+                  L'Arduino legge costantemente l'output del sonar per ottenere
+                  la distanza dell'oggetto più vicino al sensore, ed invia i
+                  dati ad un computer tramite protocollo UART54. Il PC ha il
+                  compito di utilizzare l'ultima versione di chromium con le
+                  opzioni opportune per permettere il controllo tramite codice,
+                  rendendo l'intero progetto autonomo e privo di interazioni.
+                </p>
+              </div>
+            </li>
+
+            <li>
+              <span class="num">03</span>
+              <div>
+                <h3>Software in Python</h3>
+                <p>
+                  Il codice che viene eseguito è stato scritto in python, usando
+                  la libreria pyppeteer[pyp]. Il software è diviso in due
+                  threads, che comunicano attraverso variabili condivise
+                  protette da un Lock per evitare letture o scritture parziali.
+                  Il primo thread si occupa di leggere l'output dell'Arduino e
+                  salvarlo in una variabile globale, mentre il secondo thread,
+                  leggendo la variabile, decide se continuare a scrollare o se
+                  inserire il messaggio in cui viene visualizzato il tempo
+                  impiegato dall'utente davanti al display. La distanza massima
+                  per rilevare la presenza di un utente è stata impostata a
+                  70cm.
+                </p>
+              </div>
+            </li>
+
+            <li>
+              <span class="num">04</span>
+              <div>
+                <h3>Javascript nella pagina Browser</h3>
+                <p>
+                  Nel momento in cui lo spettatore si allontana
+                  dall'installazione, il software che controlla il browser
+                  s'interrompe, e sullo schermo viene visualizzato il tempo
+                  effettivo dello scroll. Questo effetto è stato ottenuto
+                  eseguendo direttamente il codice Javascript all'interno della
+                  pagina. L'elemento testuale viene mostrato o nascosto usando
+                  la proprietà display di CSS.
+                </p>
+              </div>
+            </li>
+
+            <li>
+              <span class="num">05</span>
+              <div>
+                <h3>Conclusione</h3>
+                <p>
+                  Per semplicità di sviluppo, l'intero progetto è stato scritto
+                  in ambiente Linux (Ubuntu 24.04 LTS). Il social network scelto
+                  è stato Reddit per via della sua natura di scroll infinito,
+                  che invoglia l'utente a spendere ore ed ore davanti al social
+                  network.
+                </p>
+              </div>
+            </li>
+          </ol>
+
+          <div class="code-links">
+            <a class="btn" href="esempi/codice.py.txt" target="_blank">
+              Vedi codice Python (.txt)
+            </a>
+
+            <a class="btn" href="esempi/codice.c.txt" target="_blank">
+              Vedi codice C (.txt)
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Un-Scrollable</span>
+      <span>Ilaria Melis — 2025</span>
+    </footer>
+
+    <div
+      class="lightbox"
+      id="lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Visualizzazione immagine"
+      aria-hidden="true"
+    >
+      <button
+        type="button"
+        class="lightbox-close"
+        id="lightbox-close"
+        aria-label="Chiudi immagine"
+      >
+        &times;
+      </button>
+
+      <img id="lightbox-image" src="" alt="" />
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const lightbox = document.getElementById("lightbox");
+        const popupImage = document.getElementById("lightbox-image");
+        const closeButton = document.getElementById("lightbox-close");
+
+        let previousFocus = null;
+
+        document.querySelectorAll(".slide img").forEach(function (img) {
+          img.addEventListener("click", function () {
+            previousFocus = document.activeElement;
+
+            popupImage.src = img.currentSrc || img.src;
+            popupImage.alt = img.alt || "";
+
+            lightbox.classList.add("is-open");
+            lightbox.setAttribute("aria-hidden", "false");
+
+            document.body.style.overflow = "hidden";
+
+            closeButton.focus();
+          });
+        });
+
+        function closeLightbox() {
+          if (!lightbox.classList.contains("is-open")) return;
+
+          lightbox.classList.remove("is-open");
+          lightbox.setAttribute("aria-hidden", "true");
+
+          document.body.style.overflow = "";
+
+          popupImage.src = "";
+          popupImage.alt = "";
+
+          if (previousFocus) {
+            previousFocus.focus();
+          }
+        }
+
+        closeButton.addEventListener("click", closeLightbox);
+
+        // CHIUSURA CLICCANDO SULLO SFONDO
+        lightbox.addEventListener("click", function (event) {
+          if (event.target === lightbox) {
+            closeLightbox();
+          }
+        });
+
+        document.addEventListener("keydown", function (event) {
+          if (
+            event.key === "Escape" &&
+            lightbox.classList.contains("is-open")
+          ) {
+            closeLightbox();
+          }
+        });
+      });
+    </script>
+
+    <script src="script.js"></script>
+  </body>
+</html>
