@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Un-Scrollable</title>
     <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/arduino.min.js"></script>
   </head>
 
   <body>
@@ -14,6 +20,7 @@
         <a href="#about">About</a>
         <a href="#galleria">Galleria</a>
         <a href="#procedimento">Procedimento</a>
+        <a href="#codice">Codice</a>
       </nav>
     </header>
 
@@ -258,15 +265,201 @@
               </div>
             </li>
           </ol>
+        </div>
+      </section>
 
-          <div class="code-links">
-            <a class="btn" href="esempi/codice.py.txt" target="_blank">
-              Vedi codice Python (.txt)
-            </a>
+      <section id="codice" class="section">
+        <div class="label">04 — Codice</div>
 
-            <a class="btn" href="esempi/codice.c.txt" target="_blank">
-              Vedi codice C (.txt)
-            </a>
+        <div class="content wide">
+          <h2>Codice</h2>
+
+          <div class="code-grid">
+            <figure class="code-block">
+              <div class="code-head">
+                <span>Python</span>
+              </div>
+              <div class="code-scroll">
+                <pre><code class="language-python">from pyppeteer import launch
+import random
+import asyncio
+import time
+from threading import Thread, Lock
+import serial
+import os
+
+if os.name == "nt":
+    serial_port = "COM5"
+else:
+    serial_port = "/dev/ttyUSB0"
+
+should_scroll = False
+glob_lock = Lock()
+
+
+def read_sensors():
+    global should_scroll, glob_lock
+    print("Sensorthread started")
+    ser = serial.Serial(serial_port, 9600, timeout=0.1)
+    distances = []
+    while True:
+        try:
+            data = ser.readline().decode().strip()
+            distance = float(data)
+            distances.append(distance)
+            if len(distances) &gt; 5:
+                distances.pop(0)
+            distance = min(distances)
+        except Exception as e:
+            continue
+
+        if distance &lt; 70:
+            with glob_lock:
+                should_scroll = True
+        else:
+            with glob_lock:
+                should_scroll = False
+        time.sleep(0.1)
+
+
+async def create_element(page, text='scroll_time = "00:20:42";'):
+    await page.evaluate(
+        f"""() =&gt; {{
+        // Create overlay container
+        const overlay = document.createElement('div');
+        overlay.id = 'centered-container';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.display = 'none';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+        overlay.style.zIndex = '9999';
+        overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+
+        // Create inner content box
+        const box = document.createElement('div');
+        box.id = 'centered-box';
+        box.innerText = '{text}';
+        box.style.padding = '20px';
+        box.style.backgroundColor = 'white';
+        box.style.border = '2px solid black';
+        box.style.borderRadius = '8px';
+        box.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
+        box.style.fontSize = '5em';
+        box.style.color = 'black';
+        box.style.fontFamily = 'Courier New';
+
+        overlay.style.display = 'flex';
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+
+        document.getElementById('centered-container').style.display = 'none';
+
+    }}"""
+    )
+
+
+async def show_element(page, delay=None):
+    if delay:
+        await asyncio.sleep(delay)
+    await page.evaluate(
+        """() =&gt; {
+        document.getElementById('centered-container').style.display = 'flex';
+    }"""
+    )
+
+
+async def hide_element(page):
+    await page.evaluate(
+        """() =&gt; {
+        document.getElementById('centered-container').style.display = 'none';
+    }"""
+    )
+
+
+async def command_browser():
+    global should_scroll, glob_lock
+
+    first_scroll = False
+    print("Browser thread started")
+    browser = await launch(
+        headless=False, args=["--no-sandbox", "--disable-gpu", "--start-maximized"], handleSIGINT=False, handleSIGTERM=False, handleSIGHUP=False
+    )
+    page = await browser.newPage()
+    await page.goto("https://www.reddit.com/")
+    el = await page.Jx("/html/body/div/div/div[2]/div/div[2]/div/div/a")
+    await el[0].click()
+    time.sleep(2)
+    await page.goBack()
+    time.sleep(2)
+
+    await create_element(page)
+
+    while True:
+        with glob_lock:
+            local_scroll = should_scroll
+        if local_scroll:
+            first_scroll = True
+            await hide_element(page)
+            await page.evaluate(
+                """{
+        window.scrollBy({
+            top: 2,
+            left: 0,
+            behavior: "smooth",
+        });
+    }"""
+            )
+            await asyncio.sleep(0.02)
+        else:
+            if first_scroll:
+                await show_element(page, delay=2)
+            await asyncio.sleep(0.5)
+
+
+thread1 = Thread(target=asyncio.run, args=(command_browser(),))
+thread2 = Thread(target=read_sensors)
+
+thread1.start()
+thread2.start()
+</code></pre>
+              </div>
+            </figure>
+
+            <figure class="code-block">
+              <div class="code-head">
+                <span>C / Arduino</span>
+              </div>
+              <div class="code-scroll">
+                <pre><code class="language-arduino">const int trig_pin = 9;
+const int echo_pin = 10;
+float duration, distance;
+
+void setup() {
+    pinMode(trig_pin, OUTPUT);
+    pinMode(echo_pin, INPUT);
+    Serial.begin(9600);
+}
+
+void loop() {
+    digitalWrite(trig_pin, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trig_pin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trig_pin, LOW);
+
+    duration = pulseIn(echo_pin, HIGH);
+
+    distance = (duration * .0343) / 2;
+    Serial.println(distance);
+    delay(100);
+}
+</code></pre>
+              </div>
+            </figure>
           </div>
         </div>
       </section>
@@ -296,66 +489,6 @@
 
       <img id="lightbox-image" src="" alt="" />
     </div>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const lightbox = document.getElementById("lightbox");
-        const popupImage = document.getElementById("lightbox-image");
-        const closeButton = document.getElementById("lightbox-close");
-
-        let previousFocus = null;
-
-        document.querySelectorAll(".slide img").forEach(function (img) {
-          img.addEventListener("click", function () {
-            previousFocus = document.activeElement;
-
-            popupImage.src = img.currentSrc || img.src;
-            popupImage.alt = img.alt || "";
-
-            lightbox.classList.add("is-open");
-            lightbox.setAttribute("aria-hidden", "false");
-
-            document.body.style.overflow = "hidden";
-
-            closeButton.focus();
-          });
-        });
-
-        function closeLightbox() {
-          if (!lightbox.classList.contains("is-open")) return;
-
-          lightbox.classList.remove("is-open");
-          lightbox.setAttribute("aria-hidden", "true");
-
-          document.body.style.overflow = "";
-
-          popupImage.src = "";
-          popupImage.alt = "";
-
-          if (previousFocus) {
-            previousFocus.focus();
-          }
-        }
-
-        closeButton.addEventListener("click", closeLightbox);
-
-        // CHIUSURA CLICCANDO SULLO SFONDO
-        lightbox.addEventListener("click", function (event) {
-          if (event.target === lightbox) {
-            closeLightbox();
-          }
-        });
-
-        document.addEventListener("keydown", function (event) {
-          if (
-            event.key === "Escape" &&
-            lightbox.classList.contains("is-open")
-          ) {
-            closeLightbox();
-          }
-        });
-      });
-    </script>
 
     <script src="script.js"></script>
   </body>
